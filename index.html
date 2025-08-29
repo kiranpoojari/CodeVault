@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CodeVault</title>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.6;
+    }
+    header {
+      background: #161b22;
+      color: #58a6ff;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      letter-spacing: 1px;
+    }
+    footer {
+      background: #161b22;
+      color: #8b949e;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Snippet Card */
+    .snippet {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    .snippet:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+    }
+    .snippet h2 {
+      font-size: 20px;
+      color: #79c0ff;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    /* Code Block */
+    pre {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: "Fira Code", monospace;
+      color: #c9d1d9;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+    pre code {
+      display: block;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Copy Button */
+    button.copy {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    button.copy:hover {
+      background: #30363d;
+      color: #fff;
+    }
+    button.copy:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <header>📂 CodeVault</header>
+
+  <div class="container" id="snippets"></div>
+
+  <footer>© 2025 CodeVault. All rights reserved.</footer>
+
+  <script>
+    // Base URL to your GitHub raw snippets folder
+    const baseURL = "D:\SNIPPET/snippets/";
+
+    // List of snippets (update when you add new .txt file)
+    const files = [
+      "snippet1.txt",
+      "snippet2.txt",
+      "snippet3.txt"
+    ];
+
+    async function loadSnippets() {
+      const container = document.getElementById("snippets");
+      for (let file of files) {
+        try {
+          const response = await fetch(baseURL + file);
+          if (!response.ok) throw new Error("File not found");
+          const text = await response.text();
+
+          // Split first line as title, rest as code
+          const lines = text.split("\n");
+          const title = lines.shift().trim();
+          const code = lines.join("\n");
+
+          // Create snippet card
+          const div = document.createElement("div");
+          div.className = "snippet";
+          div.innerHTML = `
+            <h2>${title}</h2>
+            <button class="copy">Copy</button>
+            <pre><code>${code.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</code></pre>
+          `;
+          container.appendChild(div);
+        } catch (err) {
+          console.log(`${file} not found`);
+        }
+      }
+
+      // Enable copy buttons
+      document.querySelectorAll(".copy").forEach(button => {
+        button.addEventListener("click", () => {
+          const code = button.nextElementSibling.innerText;
+          navigator.clipboard.writeText(code);
+          button.innerText = "Copied!";
+          setTimeout(() => button.innerText = "Copy", 2000);
+        });
+      });
+    }
+
+    loadSnippets();
+  </script>
+</body>
+</html>
