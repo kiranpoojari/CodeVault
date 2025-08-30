@@ -1,8 +1,7 @@
-[build]
-  publish = "."
-  command = ""
+kp
+SEG
+SEG
+ZE
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+et
+
