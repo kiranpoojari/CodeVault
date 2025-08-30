@@ -1,1 +1,8 @@
-D:\SNIPPET\snippets\snippet3.txtD:\SNIPPET\snippets\snippet3.txtD:\SNIPPET\snippets\snippet3.txt
+[build]
+  publish = "."
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
